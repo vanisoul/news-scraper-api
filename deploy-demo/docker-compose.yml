@@ -1,0 +1,24 @@
+services:
+  news_api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      - UWSGI_PROCESSES=5
+      - UWSGI_HTTP_SOCKET=0.0.0.0:5000
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: "256M"
+        reservations:
+          cpus: "0.25"
+          memory: "128M"
+  haproxy:
+    image: haproxy:alpine3.20
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./haproxy.pem:/etc/haproxy/certs/haproxy.pem
