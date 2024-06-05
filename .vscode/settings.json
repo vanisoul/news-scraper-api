@@ -10,6 +10,7 @@
         "httpyac",
         "jsonify",
         "mhutchie",
-        "shardulm"
+        "shardulm",
+        "uwsgi"
     ],
 }

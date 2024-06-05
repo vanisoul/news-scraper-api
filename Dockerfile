@@ -1,21 +1,31 @@
-# 使用較輕量的 Python 基礎映像
+# 使用官方的 Python 映像
 FROM python:3.10-slim
 
-# 建立工作目錄
+# 設置工作目錄
 WORKDIR /app
 
-# 複製 requirements.txt 並安裝 Python 套件
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# 更新包列表，安裝必要的編譯工具，並清理暫存文件
+RUN apt update && apt install -y build-essential && rm -rf /var/lib/apt/lists/*
 
-# 複製專案中的所有檔案
+# 建立執行用戶
+RUN adduser --disabled-password --gecos "" --uid 1000 app
+RUN chown -R app:app /app
+USER app
+
+# 複製 requirements.txt 並安裝依賴
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# 複製應用代碼
 COPY . .
 
-# 設定環境變數
-ENV FLASK_APP=run.py
+# 設置環境變數
+ENV PATH="/home/app/.local/bin:${PATH}"
+ENV UWSGI_PROCESSES=5
+ENV UWSGI_HTTP_SOCKET=0.0.0.0:8000
 
-# 開放 Flask 預設埠
-EXPOSE 5000
+RUN mkdir /app/log
 
-# 使用flask指令啟動應用程式
-CMD ["flask", "run", "--host=0.0.0.0"]
+# 使用 uWSGI 運行應用
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
+

@@ -12,6 +12,7 @@
 ### 啟動
 
 - `flask run --host=0.0.0.0`
+- `UWSGI_PROCESSES=5 UWSGI_HTTP_SOCKET=0.0.0.0:5000 uwsgi --ini uwsgi.ini`
 
 ### API 文件
 
