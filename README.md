@@ -11,12 +11,15 @@
 
 ### 啟動
 
-- `flask run --host=0.0.0.0`
-- `UWSGI_PROCESSES=5 UWSGI_HTTP_SOCKET=0.0.0.0:5000 uwsgi --ini uwsgi.ini`
+- 開發環境 flask : `flask run --host=0.0.0.0`
+- 發布環境 uwsgi : `UWSGI_PROCESSES=5 UWSGI_HTTP_SOCKET=0.0.0.0:5000 uwsgi --ini uwsgi.ini`
 
 ### API 文件
 
 - `http://localhost:5000/apidocs`
+
+### 反向代理範例
+[連結](./deploy-demo/)
 
 ### Q&A
 
